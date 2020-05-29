@@ -1,0 +1,13 @@
+{
+    "name": "uhbcemil/ip-api",
+    "description": "A simple library to interact with ip-api.com",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cemil Akkoc",
+            "email": "cemil@akko.cc"
+        }
+    ],
+    "require": {}
+}
