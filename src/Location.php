@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\RequestException;
  * A simple API to interact with ip-api.com
  * @author Cemil Akkoc <cemil@akko.cc>
  */
-class Location {    
+class Location {
 
     /**
      * Status of the connection between you and the ip-api.com
