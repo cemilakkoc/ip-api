@@ -1,6 +1,6 @@
 {
-  "name": "cemilakkoc/ip-api",
-  "description": "A simple library to interact with ip-api.com",
+  "name": "soltivo/location",
+  "description": "A simple library to detect location of an ip address.",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -11,10 +11,11 @@
   ],
   "autoload": {
     "psr-4": {
-      "Soltivo\\IPApi\\": "src/"
+      "Soltivo\\Location\\": "src/"
     }
   },
   "require": {
-    "guzzlehttp/guzzle": "~6.0"
+    "guzzlehttp/guzzle": "~6.0",
+    "php-parallel-lint/php-console-color": "^0.3.0"
   }
 }
