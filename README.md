@@ -21,7 +21,7 @@ $options = [
     ]
 ];
 
-$location = new \Soltivo\Location($options);
+$location = new \Soltivo\Location\Location($options);
 
 $countryaa2 = $location->countryCode;
 $state = $location->stateName;
