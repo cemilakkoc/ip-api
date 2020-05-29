@@ -1,6 +1,6 @@
 <?php
 
-namespace Soltivo\IPApi;
+namespace Soltivo\Location;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -10,6 +10,13 @@ use GuzzleHttp\Exception\RequestException;
  * @author Cemil Akkoc <cemil@akko.cc>
  */
 class Location {
+
+    /**
+     * This is used for testing purposes, used to test for the cases when ip-api.com goes down.
+     * 
+     * @var bool
+     */
+    public $test = false;
 
     /**
      * Status of the connection between you and the ip-api.com
@@ -42,15 +49,15 @@ class Location {
     public $fields;
     
     /*
-     * Load IP address and the options.
+     * Load the options.
      * 
-     * @param string $ip IP address of the user.
      * @param array $options Options to be used when checking the ip address.
      * 
      * @return void
      */
     public function __construct(array $options = []) {
         $this->ip = $options["ip"];
+        $this->test = $options["test"] ?? false;
         $this->lang = $options["lang"] ?? "en";
         $fields = ( $options["fields"] ?? [] ) + [ 
             "country", 
@@ -80,8 +87,12 @@ class Location {
      * @return void
      */
     public function load() {
+        // To simulate the situation where http://ip-api.com
+        // I'll use a random website address which doesn't work at all.
+        $baseuri = $this->test ? "http://cemil.akko.cc" : "http://ip-api.com/";
+    
         try {
-            $client = new Client(["base_uri" => "http://ip-api.com/"]);
+            $client = new Client(["base_uri" => $baseuri]);
     
             $response = $client->request('GET', "/json/$this->ip", [
                 'query' => [
@@ -113,29 +124,64 @@ class Location {
      * @return string
      */
     public function __get($key) {
+        // Return null if anything wrong goes with https://ip-api.com
         if($this->badConnection) {
             return null;
         }
-        
-        // Formatted names.
-        $data = $this->data;
-        $formatted = [
-            "countryName" => $this->val("country"),
-            "countryName" => $this->val("country"),
-            "countryCode" => $this->val("countryCode"),
-            "region" => $this->val("regionName"), 
-            "state" => $this->val("regionName"),
-            "stateName" => $this->val("regionName"),
-            "stateCode" => $this->val("region"),
-            "regionCode" => $this->val("region"),
-            "city" => $this->val("city"),
-            "zip" => $this->val("zip"),
-            "postal_code" => $this->val("zip"),
-            "postal" => $this->val("zip"),
-            "timezone" => $this->val("timezone")
-        ];
 
-        return $formatted[$key] ?? $this->data[$key] ?? null;
+        // Formatted names.
+        switch($key) {
+            default: 
+                return $this->data[$key] ?? null;
+                break;
+            case "country":
+            case "countryName":
+            case "countryname":
+            case "country_name":
+                return $this->val("country");
+                break;
+            case "countryCode":
+            case "countrycode":
+            case "country_code":
+            case "countrya2":
+                return $this->val("countryCode");
+                break;
+            case "state":
+            case "stateName":
+            case "statename":
+            case "region":
+            case "regionName":
+            case "regionname":
+            case "region_name":
+                return $this->val("regionName");
+                break;
+            case "stateCode":
+            case "statecode":
+            case "regionCode":
+            case "regioncode":
+            case "region_code":
+                return $this->val("region");
+                break;
+            case "zip":
+            case "zipCode":
+            case "zipcode":
+            case "zip_code":
+            case "postalCode":
+            case "postalcode":
+            case "postal_code":
+            case "postal":
+                return $this->val("zip");
+                break;
+            case "timeZone":
+            case "timezone":
+            case "time_zone":
+                return $this->val("timezone");
+                break;
+            case "currency":
+            case "money":
+                return $this->val("currency");
+                break;            
+        }
         
     }
 }
