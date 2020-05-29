@@ -3,12 +3,21 @@
 namespace Soltivo\IPApi;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * A simple API to interact with ip-api.com
  * @author Cemil Akkoc <cemil@akko.cc>
  */
 class Location {    
+
+    /**
+     * Status of the connection between you and the ip-api.com
+     * 
+     * @var bool
+     */
+    public $badConnection = false;
+    
     /**
      * IP address of the user.
      * 
@@ -71,16 +80,22 @@ class Location {
      * @return void
      */
     public function load() {
-        $client = new Client(["base_uri" => "http://ip-api.com/json"]);
+        try {
+            $client = new Client(["base_uri" => "http://ip-api.com/"]);
+    
+            $response = $client->request('GET', "/json/$this->ip", [
+                'query' => [
+                    "lang" => $this->lang,
+                    "fields" => $this->fields
+                ]
+            ]);
+            
+            $this->data = json_decode($response->getBody()->getContents(), true);
 
-        $response = $client->request('GET', "/json/$this->ip", [
-            'query' => [
-                "lang" => $this->lang,
-                "fields" => $this->fields
-            ]
-        ]);
+        } catch(RequestException $e) {
+            $this->badConnection = true;
+        }
         
-        $this->data = json_decode($response->getBody()->getContents(), true);
     }
 
     /**
@@ -98,6 +113,10 @@ class Location {
      * @return string
      */
     public function __get($key) {
+        if($this->badConnection) {
+            return null;
+        }
+        
         // Formatted names.
         $data = $this->data;
         $formatted = [
