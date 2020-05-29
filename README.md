@@ -1,14 +1,14 @@
-# cemilakkoc/ip-api
+# soltivo/location
 
 With the help of this simple library, you can get Country, State, City, and many other pieces of information about your users.
 
-This library uses the [ip-api](https://google.com) to retrieve IP location data.
+This library uses the [ip-api.com](https://google.com) to retrieve IP location data.
 
 ## Installation
 
 
 ```bash
-composer require cemilakkoc/ip-api
+composer require soltivo/location
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ $options = [
     ]
 ];
 
-$location = new \Soltivo\IPApi\Location($options);
+$location = new \Soltivo\Location($options);
 
 $countryaa2 = $location->countryCode;
 $state = $location->stateName;
