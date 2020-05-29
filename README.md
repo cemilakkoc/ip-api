@@ -2,7 +2,7 @@
 
 With the help of this simple library, you can get Country, State, City, and many other pieces of information about your users.
 
-This library uses the [ip-api.com](https://ip-api.com) to retrieve the IP location data.
+This library uses the [ip-api.com](https://google.com) to retrieve IP location data.
 
 ## Installation
 
@@ -21,7 +21,7 @@ $options = [
     ]
 ];
 
-$location = new \Soltivo\Location\Location($options);
+$location = new \Soltivo\Location($options);
 
 $countryaa2 = $location->countryCode;
 $state = $location->stateName;
