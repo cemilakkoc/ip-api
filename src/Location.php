@@ -123,6 +123,7 @@ class Location {
             "countryName" => $this->val("country"),
             "countryName" => $this->val("country"),
             "countryCode" => $this->val("countryCode"),
+            "region" => $this->val("regionName"), 
             "state" => $this->val("regionName"),
             "stateName" => $this->val("regionName"),
             "stateCode" => $this->val("region"),
